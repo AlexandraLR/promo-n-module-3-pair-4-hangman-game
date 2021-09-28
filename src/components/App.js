@@ -1,56 +1,31 @@
 import '../styles/App.scss';
 import ahorcado from '../images/favicon-ahorcado.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import callToApi from '../services/api';
 
 function App() {
   //estados
   let [numberOfErrors, setNumberOfErrors] = useState(0);
   const [introducedLetter, setintroducedLetter] = useState('');
-  const [word, setWord] = useState('katakroker');
+  const [word, setWord] = useState('Katakroker');
   const [feedback, setFeedback] = useState('');
   const [userLetters, setUserLetters] = useState([]);
-  const [randomWord, setRandomWord] = useState('');
-  //const [error, setError] = useState([]);
-  //const [solution, setSolution] = useState([]);
 
-  //funciones
-  // const answerSolution = () => {
-  //   if (word.includes(introducedLetter)) {
-  //     if (!solution.includes(introducedLetter)) {
-  //       setSolution(introducedLetter);
-  //       setFeedback('Has acertado!');
-  //       //fallo
-  //       //<li className="letter">f</li>
-  //     } else {
-  //       setFeedback(
-  //         'ERROR: ya has escrito esta letra antes y si es parte de la palabra.'
-  //       );
-  //     }
-  //   } else {
-  //     if (!error.includes(introducedLetter)) {
-  //       setError(introducedLetter);
-  //       //fallo
-  //       //<li className="letter">f</li>
-  //       setFeedback('Has fallado... Prueba otra vez!');
-  //     } else {
-  //       setFeedback(
-  //         'ERROR: ya has escrito esta letra antes y no es parte de la palabra.'
-  //       );
-  //     }
-  //   }
-  // };
+  //hace que la petición se ejecute solo una vez al cargar la página
+  useEffect(() => {
+    callToApi()
+      .then((response) => {
+        console.log(response);
+        setWord(response);
+      });
+  }, [])
 
-
-  callToApi()
-  .then((response) => {
-    setRandomWord(console.log(response));
-  });
 
   const handleErrors = (ev) => {
     numberOfErrors++;
     setNumberOfErrors(numberOfErrors);
   };
+
   const handleIntroducedLetter = (ev) => {
     const letter = ev.currentTarget.value;
     const patt = /^[a-zA-Záéíóúñü]{1}$/;
@@ -67,18 +42,20 @@ function App() {
       setFeedback('ERROR: debes escribir una letra del abecedario castellano');
       setintroducedLetter(letter);
     }
+    console.log(letter);
   };
 
-  const getSolution = () => {
-    //------------Array ex 5 -----------------------------------------------------------
-    // const found = userLetters.findIndex((l) => word.includes(l));
-    // const letter = found.split('');
-    // return letter;
-  };
+
+
+  // const getSolution = () => {
+  //   if word.includes
+  // };
+
   const renderSolutionLetters = () => {
-    getSolution();
+    // getSolution();
     const wordLetters = word.split('');
-    return wordLetters.map((x) => <li class="letter">{}</li>); //pendiente añadir letra
+    return wordLetters.map((x) => <li class="letter">{ }</li>); //pendiente añadir letra
+    console.log(wordLetters);
   };
 
   const renderErrorLetters = () => {
