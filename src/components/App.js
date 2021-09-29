@@ -1,31 +1,33 @@
 import '../styles/App.scss';
-import ahorcado from '../images/favicon-ahorcado.jpg';
 import { useEffect, useState } from 'react';
 import callToApi from '../services/api';
+//import ahorcado from '../images/favicon-ahorcado.jpg';
+
 
 function App() {
-  //estados
+  //VARIABLES ESTADO
   let [numberOfErrors, setNumberOfErrors] = useState(0);
   const [introducedLetter, setintroducedLetter] = useState('');
-  const [word, setWord] = useState('Katakroker');
+  const [word, setWord] = useState('hola');
   const [feedback, setFeedback] = useState('');
   const [userLetters, setUserLetters] = useState([]);
 
-  //hace que la petición se ejecute solo una vez al cargar la página
-  useEffect(() => {
-    callToApi()
-      .then((response) => {
-        console.log(response);
-        setWord(response);
-      });
-  }, [])
+  //HACE QUE LA PETICIÓN SE EJECUTE SOLO 1 VEZ AL CARGAR LA PÁGINA
+  // useEffect(() => {
+  //   callToApi()
+  //     .then((response) => {
+  //       console.log(response);
+  //       setWord(response);
+  //     });
+  // }, [])
 
-
+  //EVENTO AL HACER CLICK EN EL BOTON
   const handleErrors = (ev) => {
     numberOfErrors++;
     setNumberOfErrors(numberOfErrors);
   };
 
+  //EVENTO AL ESCRIBIR UNA LETRA
   const handleIntroducedLetter = (ev) => {
     const letter = ev.currentTarget.value;
     const patt = /^[a-zA-Záéíóúñü]{1}$/;
@@ -45,26 +47,32 @@ function App() {
     console.log(letter);
   };
 
-
-
-  // const getSolution = () => {
-  //   if word.includes
-  // };
-
-  const renderSolutionLetters = () => {
-    // getSolution();
-    const wordLetters = word.split('');
-    return wordLetters.map((x) => <li class="letter">{ }</li>); //pendiente añadir letra
-    console.log(wordLetters);
-  };
-
+  //FUNCIÓN QUE COMVIERTE ARROW CON LAS LETRAS FALLADAS 
   const renderErrorLetters = () => {
     const found = userLetters.filter((l) => !word.includes(l));
     console.log(found);
     return found.map((l) => <li className="letter">{l}</li>);
   };
 
-  //return
+  const renderCorrectLetters = () => {
+    //CONVIERTO UNA PALABRA EN UN ARRAY
+    const wordLetters = word.split('');
+    //RECORRE EL ARRAY  DE LA PALABRA ESCRITA POR USUARIO DENTRO DEL ARRAY DE PALABRA
+    const correctLetter = wordLetters.map((letter) => {
+      const index = userLetters.indexOf(letter);
+      //SI NO LO ENCUENTRA DEVUELVE -1
+      if (index === -1) {
+        return <li class="letter"> </li>;
+      } else {
+        return <li class="letter">{letter} </li>;
+      }
+    })
+
+    return correctLetter;
+  }
+
+
+  //RETURN
   return (
     <div className="page">
       <header>
@@ -75,7 +83,7 @@ function App() {
           <div className="solution">
             <h2 className="title">Solución:</h2>
             <ul className="letters">
-              {renderSolutionLetters()} {/* //pendiente--------------- */}
+              {renderCorrectLetters()} { }
             </ul>
           </div>
           <div className="feedback">
