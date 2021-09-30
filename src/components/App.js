@@ -8,18 +8,18 @@ function App() {
   //VARIABLES ESTADO
   let [numberOfErrors, setNumberOfErrors] = useState(0);
   const [introducedLetter, setintroducedLetter] = useState('');
-  const [word, setWord] = useState('hola');
+  const [word, setWord] = useState(' ');
   const [feedback, setFeedback] = useState('');
   const [userLetters, setUserLetters] = useState([]);
 
   //HACE QUE LA PETICIÓN SE EJECUTE SOLO 1 VEZ AL CARGAR LA PÁGINA
-  // useEffect(() => {
-  //   callToApi()
-  //     .then((response) => {
-  //       console.log(response);
-  //       setWord(response);
-  //     });
-  // }, [])
+  useEffect(() => {
+    callToApi()
+      .then((word) => {
+        console.log(word);
+        setWord(word);
+      });
+  }, [])
 
   //EVENTO AL HACER CLICK EN EL BOTON
   const handleErrors = (ev) => {
@@ -44,27 +44,28 @@ function App() {
       setFeedback('ERROR: debes escribir una letra del abecedario castellano');
       setintroducedLetter(letter);
     }
-    console.log(letter);
+    //console.log(letter);
   };
 
   //FUNCIÓN QUE COMVIERTE ARROW CON LAS LETRAS FALLADAS 
   const renderErrorLetters = () => {
     const found = userLetters.filter((l) => !word.includes(l));
-    console.log(found);
-    return found.map((l) => <li className="letter">{l}</li>);
+    //console.log(found);
+    return found.map((l, i) => <li className="letter" key={i}>{l}</li>);
   };
+
 
   const renderCorrectLetters = () => {
     //CONVIERTO UNA PALABRA EN UN ARRAY
     const wordLetters = word.split('');
     //RECORRE EL ARRAY  DE LA PALABRA ESCRITA POR USUARIO DENTRO DEL ARRAY DE PALABRA
-    const correctLetter = wordLetters.map((letter) => {
+    const correctLetter = wordLetters.map((letter, i) => {
       const index = userLetters.indexOf(letter);
       //SI NO LO ENCUENTRA DEVUELVE -1
       if (index === -1) {
-        return <li class="letter"> </li>;
+        return <li className="letter" key={i}> </li>;
       } else {
-        return <li class="letter">{letter} </li>;
+        return <li className="letter" key={i}>{letter} </li>;
       }
     })
 
